@@ -1,5 +1,5 @@
 <template>
-    <h1 class = 'title'>TDOD</h1>
+    <h1 class = 'title'>TODO</h1>
 </template>
 
 <style scoped>
