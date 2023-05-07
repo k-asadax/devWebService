@@ -1,0 +1,1 @@
+export class TodoTask{constructor(public id: number, public task: string) {}};
