@@ -63,7 +63,7 @@
       ,"https://stbfep.sps-system.com/MerchantPaySuccess.jsp"
       ,"https://stbfep.sps-system.com/MerchantPayCancel.jsp"
       ,"https://stbfep.sps-system.com/MerchantPayError.jsp"
-      ,"https://stbfep.sps-system.com/MerchantPayResultRecieveSuccess.jsp"
+      ,"http://localhost/MerchantPayResultRecieveSuccess.jsp"
       ,"自由欄１　１２３４５６"
       ,"自由欄２　１２３４５６"
       ,"自由欄３　１２３４５６"
