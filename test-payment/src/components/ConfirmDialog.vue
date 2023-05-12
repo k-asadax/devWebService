@@ -32,17 +32,17 @@
   
 <script setup lang="ts">
   import { useConfirmDialog } from "@/composables/useConfirmDialog";
-  const { isOpen, ok, cancel, close, dialogText } = useConfirmDialog();
-  import { ref } from 'vue';
+  import { encryptWithSHA1 } from "@/composables/encryptWithSHA1";
   import { Order } from '@/model/Order';
+  const { isOpen, ok, cancel, close, dialogText } = useConfirmDialog();
 
   function f_submit() {
     let hashCode:HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById('text-hash-code');
     var order: Order = new Order(
-       "credit3d2"
-      ,"66758"
-      ,"064"
-      ,"SPSTestUser20230508000000"
+       "credit3d"
+      ,"30132"
+      ,"201"
+      ,"SPSTestUser0001"
       ,""
       ,""
       ,"SPSOrderId" + getYYYYMMDDHHMMSS()
@@ -75,50 +75,52 @@
       ,""
     );
     order.free_csv              = "";
-    order.sps_hashcode          = order.toString();
-    var form: HTMLFormElement = <HTMLFormElement>document.createElement('form')
-    form.action = "https://stbfep.sps-system.com/f01/FepBuyInfoReceive.do";
-    form.target = "testIframe2";
-    form.method = "POST";
-    form.acceptCharset = "shift-jis";
-    form.hidden = true;
-    document.body.append(form);
-    form.addEventListener('formdata', (e) => {
-      var fd = e.formData;
-      fd.set('pay_method'        ,order.pay_method       );
-      fd.set('merchant_id'       ,order.merchant_id      );
-      fd.set('service_id'        ,order.service_id       );
-      fd.set('cust_code'         ,order.cust_code        );
-      fd.set('sps_cust_no'       ,order.sps_cust_no      );
-      fd.set('sps_payment_no'    ,order.sps_payment_no   );
-      fd.set('order_id'          ,order.order_id         );
-      fd.set('item_id'           ,order.item_id          );
-      fd.set('pay_item_id'       ,order.pay_item_id      );
-      fd.set('item_name'         ,order.item_name        );
-      fd.set('tax'               ,order.tax              );
-      fd.set('amount'            ,order.amount           );
-      fd.set('pay_type'          ,order.pay_type         );
-      fd.set('auto_charge_type'  ,order.auto_charge_type );
-      fd.set('service_type'      ,order.service_type     );
-      fd.set('div_settele'       ,order.div_settele      );
-      fd.set('last_charge_month' ,order.last_charge_month);
-      fd.set('camp_type'         ,order.camp_type        );
-      fd.set('tracking_id'       ,order.tracking_id      );
-      fd.set('terminal_type'     ,order.terminal_type    );
-      fd.set('success_url'       ,order.success_url      );
-      fd.set('cancel_url'        ,order.cancel_url       );
-      fd.set('error_url'         ,order.error_url        );
-      fd.set('pagecon_url'       ,order.pagecon_url      );
-      fd.set('free1'             ,order.free1            );
-      fd.set('free2'             ,order.free2            );
-      fd.set('free3'             ,order.free3            );
-      fd.set('free_csv'          ,order.free_csv         );
-      fd.set('request_date'      ,order.request_date     );
-      fd.set('limit_second'      ,order.limit_second     );
-      fd.set('sps_hashcode'      ,order.sps_hashcode     );
-      fd.set('hashkey'           ,order.hashkey          );
+    encryptWithSHA1(order.toString()).then(encrypted => {
+      order.sps_hashcode = encrypted;
+      var form: HTMLFormElement = <HTMLFormElement>document.createElement('form')
+      form.action = "https://stbfep.sps-system.com/f01/FepBuyInfoReceive.do";
+      form.target = "testIframe2";
+      form.method = "POST";
+      form.acceptCharset = "shift-jis";
+      form.hidden = true;
+      document.body.append(form);
+      form.addEventListener('formdata', (e) => {
+        var fd = e.formData;
+        fd.set('pay_method'        ,order.pay_method       );
+        fd.set('merchant_id'       ,order.merchant_id      );
+        fd.set('service_id'        ,order.service_id       );
+        fd.set('cust_code'         ,order.cust_code        );
+        fd.set('sps_cust_no'       ,order.sps_cust_no      );
+        fd.set('sps_payment_no'    ,order.sps_payment_no   );
+        fd.set('order_id'          ,order.order_id         );
+        fd.set('item_id'           ,order.item_id          );
+        fd.set('pay_item_id'       ,order.pay_item_id      );
+        fd.set('item_name'         ,order.item_name        );
+        fd.set('tax'               ,order.tax              );
+        fd.set('amount'            ,order.amount           );
+        fd.set('pay_type'          ,order.pay_type         );
+        fd.set('auto_charge_type'  ,order.auto_charge_type );
+        fd.set('service_type'      ,order.service_type     );
+        fd.set('div_settele'       ,order.div_settele      );
+        fd.set('last_charge_month' ,order.last_charge_month);
+        fd.set('camp_type'         ,order.camp_type        );
+        fd.set('tracking_id'       ,order.tracking_id      );
+        fd.set('terminal_type'     ,order.terminal_type    );
+        fd.set('success_url'       ,order.success_url      );
+        fd.set('cancel_url'        ,order.cancel_url       );
+        fd.set('error_url'         ,order.error_url        );
+        fd.set('pagecon_url'       ,order.pagecon_url      );
+        fd.set('free1'             ,order.free1            );
+        fd.set('free2'             ,order.free2            );
+        fd.set('free3'             ,order.free3            );
+        fd.set('free_csv'          ,order.free_csv         );
+        fd.set('request_date'      ,order.request_date     );
+        fd.set('limit_second'      ,order.limit_second     );
+        fd.set('sps_hashcode'      ,order.sps_hashcode     );
+        fd.set('hashkey'           ,order.hashkey          );
+      });
+      form.submit();
     });
-    form.submit();
   };
   
   function getYYYYMMDDHHMMSS() : string {
