@@ -31,7 +31,6 @@
 </template>
   
 <script setup lang="ts">
-/// <reference path="../@type/jslib.d.ts" />
   import { useConfirmDialog } from "@/composables/useConfirmDialog";
   const { isOpen, ok, cancel, close, dialogText } = useConfirmDialog();
   import { ref } from 'vue';
@@ -76,7 +75,7 @@
       ,""
     );
     order.free_csv              = "";
-    order.sps_hashcode          = Sha1.hash( order.toString() );
+    order.sps_hashcode          = order.toString();
     var form: HTMLFormElement = <HTMLFormElement>document.createElement('form')
     form.action = "https://stbfep.sps-system.com/f01/FepBuyInfoReceive.do";
     form.target = "testIframe2";
